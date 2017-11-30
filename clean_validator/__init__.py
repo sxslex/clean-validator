@@ -102,17 +102,27 @@ def valid_object(obs, types, name=None, ignore_missing=False):
                 ignore_missing=ignore_missing
             ))
     elif isinstance(types, list) and obs:
-        # TODO: testar em todos os itens mas agrupar o erro
         new_name = list(name)
         if new_name:
             new_name[-1] += '[]'
-        aux = valid_object(
-            obs=obs[0],
-            types=types[0],
-            name=new_name,
-            ignore_missing=ignore_missing
-        )
-        erros.extend(aux)
+        if len(types) == 1:
+            for ob in obs:
+                aux = valid_object(
+                    obs=ob,
+                    types=types[0],
+                    name=new_name,
+                    ignore_missing=ignore_missing
+                )
+                erros.extend(aux)
+        else:
+            for ob, ty in zip(obs, types):
+                aux = valid_object(
+                    obs=ob,
+                    types=ty,
+                    name=new_name,
+                    ignore_missing=ignore_missing
+                )
+            erros.extend(aux)
     elif isinstance(types, dict):
         try:
             extras = set(obs) - set(types)

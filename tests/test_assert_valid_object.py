@@ -18,3 +18,10 @@ def test_complex_struct():
             "idade": (int, clean_validator.TypeNone,),
         }]
     )
+
+
+def test_list_diff():
+    clean_validator.assert_valid_object(
+        [1, 'slex'],
+        [int, str]
+    )

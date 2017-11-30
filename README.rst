@@ -59,7 +59,7 @@ Development
 Use py.test
 
 .. code::
-    $ py.test --cov=clean_validator tests/
+    $ py.test --cov=clean_validator tests/ -v
 
 Use pep8
 
