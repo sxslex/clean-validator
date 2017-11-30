@@ -5,10 +5,10 @@ from setuptools import setup
 
 setup(
     name='clean-validator',
-    version='0.0.2',
+    version='0.0.3',
     url='https://github.com/sxslex/clean-validator',
     download_url=(
-        'https://github.com/sxslex/clean-validator/archive/v0.0.2.tar.gz'
+        'https://github.com/sxslex/clean-validator/archive/v0.0.3.tar.gz'
     ),
     author='SleX',
     author_email='sx.slex@gmail.com',

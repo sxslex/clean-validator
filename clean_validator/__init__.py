@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """Used to validate objects cleanly and simply."""
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 TypeNone = type(None)
