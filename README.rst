@@ -3,7 +3,7 @@ clean-validator
 ======
 
 
-.. image:: https://img.shields.io/badge/pypi-v0.0.1-orange.svg
+.. image:: https://img.shields.io/badge/pypi-v0.0.2-orange.svg
     :target: https://pypi.python.org/pypi/clean-validator
 
 .. image:: https://img.shields.io/badge/python-2.6%2C%202.7%2C%203.3+-blue.svg
@@ -17,6 +17,7 @@ clean-validator
 
 
 Used to validate objects cleanly and simply.
+Very good for testing implementation. ;)
 
 
 Usage in python

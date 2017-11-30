@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
+"""Used to validate objects cleanly and simply."""
 
-__version__ = '1.0.0'
+__version__ = '0.0.2'
 
 
 TypeNone = type(None)
@@ -8,10 +9,12 @@ TypeFunction = type(lambda a: a)
 
 
 def pprint_object_type(obj):
+    """Pprint_object_type."""
     print(pformat_object_type(obj))
 
 
 def pformat_object_type(obj, level=1):
+    """Pformat_object_type."""
     tab_level = '\t' * level
     if isinstance(obj, dict):
         return (
@@ -46,16 +49,33 @@ def pformat_object_type(obj, level=1):
 
 
 class OR(list):
+    """OR List Comparations."""
+
     def __init__(self, *kargs):
+        """OR List Comparations."""
         list.__init__(self, kargs)
 
 
 class AND(list):
+    """AND List Comparations."""
+
     def __init__(self, *kargs):
+        """AND List Comparations."""
         list.__init__(self, kargs)
 
 
+def or_(*kargs):
+    """OR List Comparations."""
+    return OR(*kargs)
+
+
+def and_(*kargs):
+    """AND List Comparations."""
+    return AND(*kargs)
+
+
 def valid_object(obs, types, name=None, ignore_missing=False):
+    """Valid_object."""
     name = name or []
     erros = []
     if isinstance(types, (type, )):
@@ -162,6 +182,7 @@ def valid_object(obs, types, name=None, ignore_missing=False):
 
 
 def assert_valid_object(obs, types, ignore_missing=False):
+    """Assert_valid_object."""
     erros = valid_object(
         obs=obs,
         types=types,
@@ -171,18 +192,3 @@ def assert_valid_object(obs, types, ignore_missing=False):
         raise Exception(
             '\n'.join('\t' + e for e in erros)
         )
-
-
-# print(pformat_object_type({"nome": "slex", "idade": 38}))
-# print(pformat_object_type({
-#     "nome": "slex",
-#     "idade": 38,
-#     "filhos": [
-#         {
-#             "nome": "Icaro",
-#         },
-#         {
-#             "nome": "Gabriel",
-#         }
-#     ]
-# }))
