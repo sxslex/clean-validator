@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 """Test's."""
+# update pypi:
+# python setup.py sdist upload -r pypi
 
 import clean_validator
 
