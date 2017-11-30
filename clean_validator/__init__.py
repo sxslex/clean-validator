@@ -20,7 +20,7 @@ def pformat_object_type(obj, level=1):
         return (
             '{\n' +
             ''.join([
-                "{}'{}': {},\n".format(
+                "%s'%s': %s,\n" % (
                     tab_level,
                     key,
                     pformat_object_type(obj[key], level + 1)
@@ -33,7 +33,7 @@ def pformat_object_type(obj, level=1):
         return (
             '[\n' +
             ''.join([
-                "{}{},\n".format(
+                "%s%s,\n" % (
                     tab_level,
                     pformat_object_type(item, level + 1)
 
@@ -43,7 +43,7 @@ def pformat_object_type(obj, level=1):
             ']'
         )
     else:
-        return '{}'.format(
+        return '%s' % (
             type(obj).__name__ if obj is not None else 'TypeNone'
         )
 
@@ -81,7 +81,7 @@ def valid_object(obs, types, name=None, ignore_missing=False):
     if isinstance(types, (type, )):
         if not isinstance(obs, types):
             erros.append(
-                'type invalid field {}:{} != {}'.format(
+                'type invalid field %s:%s != %s' % (
                     '.'.join(name), type(obs), types
                 )
             )
@@ -92,7 +92,7 @@ def valid_object(obs, types, name=None, ignore_missing=False):
             resp, msg = resp
         if not resp:
             erros.append(
-                'invalid field {}:{} {}'.format(
+                'invalid field %s:%s %s' % (
                     '.'.join(name), obs, msg
                 ).strip()
             )
@@ -158,9 +158,9 @@ def valid_object(obs, types, name=None, ignore_missing=False):
             isinstance(types[t], TypeNone)
         ])
         if len(extras):
-            erros.append('Retornado campos extras {}'.format(extras))
+            erros.append('returned extra fields %s' % extras)
         if len(missing) > num_none and not ignore_missing:
-            erros.append('Faltando campos {}'.format(missing))
+            erros.append('missing fields %s' % missing)
         for nname in types:
             new_name = list(name)
             new_name.append(nname)
@@ -174,7 +174,7 @@ def valid_object(obs, types, name=None, ignore_missing=False):
             )
     else:
         raise Exception(
-            'type invalid: {}:{}'.format(
+            'type invalid: %s:%s' % (
                 '.'.join(name), types
             )
         )

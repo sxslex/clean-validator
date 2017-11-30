@@ -13,7 +13,7 @@ setup(
     author='SleX',
     author_email='sx.slex@gmail.com',
     description=(
-        "Used to validate objects cleanly and simply. \n" +
+        "Used to validate objects cleanly and simply. " +
         "Very good for testing implementation. ;)"
     ),
     keywords=['validate', 'object', 'test', 'py.test'],
