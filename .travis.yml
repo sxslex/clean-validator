@@ -10,3 +10,4 @@ install:
   - pip install -r requirements-development.txt
 script:
   - py.test --cov=clean_validator tests/
+  - pycodestyle clean_validator tests
