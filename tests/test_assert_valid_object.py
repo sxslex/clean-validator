@@ -93,9 +93,10 @@ def test_assert_expecific_value():
             filhos=[
                 dict(nome='Icaro', idade=18)
             ]
-        ), {
-        'email': 'teste@teste.com.br.',
-        'filhos': [
+        ),
+        {
+            'email': 'teste@teste.com.br.',
+            'filhos': [
                 {
                     'idade': 18,
                     'nome': 'Icaro',
