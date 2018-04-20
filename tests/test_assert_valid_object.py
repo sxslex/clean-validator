@@ -89,22 +89,68 @@ def test_pformat_object_type():
 def test_assert_expecific_value():
     resp = clean_validator.valid_object(
         dict(
+            name="TESTE",
             email="teste@teste.com.br",
             filhos=[
-                dict(nome='Icaro', idade=18)
-            ]
+                dict(nome='Icaro', idade=18, sexo=1)
+            ],
         ),
         {
+            'key': str,
             'email': 'teste@teste.com.br.',
             'filhos': [
                 {
-                    'idade': 18,
+                    'idade': clean_validator.and_(
+                        clean_validator.or_(18, 16), int
+                    ),
                     'nome': 'Icaro',
+                    'sexo': clean_validator.or_(
+                        lambda x: isinstance(x, str),
+                        lambda x: isinstance(x, bool),
+                    )
+                },
+                {
+                    'idade': clean_validator.and_(
+                        clean_validator.or_(18, 16), int
+                    ),
+                    'nome': 'Gabriel',
+                    'sexo': clean_validator.or_(
+                        lambda x: isinstance(x, str),
+                        lambda x: isinstance(x, bool),
+                    )
                 },
             ],
         }
     )
-    assert len(resp) == 1
+    assert len(resp) == 6
     assert (
         'value invalid field email:teste@teste.com.br != teste@teste.com.br.'
     ) in resp
+    print(resp)
+
+
+def test_pprint_object_type():
+    clean_validator.pprint_object_type(dict())
+
+
+def test_valid_object_type_invalid():
+
+    class T:
+        pass
+
+    sm = ''
+    try:
+        clean_validator.valid_object(T(), None)
+    except Exception as e:
+        sm = str(e)
+    assert 'type invalid' in sm
+
+
+def test_assert_valid_object():
+
+    sm = ''
+    try:
+        clean_validator.assert_valid_object(1, str)
+    except Exception as e:
+        sm = str(e)
+    assert 'type invalid field' in sm

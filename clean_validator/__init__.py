@@ -7,6 +7,9 @@ __version__ = '0.0.3'
 TypeNone = type(None)
 TypeFunction = type(lambda a: a)
 
+MISSING_MSG = 'missing fields %s'
+EXTRAS_MSG = 'returned extra fields %s'
+
 
 def pprint_object_type(obj):
     """Pprint_object_type."""
@@ -78,8 +81,8 @@ def valid_object(
     obs,
     types,
     name=None,
-    missing_msg='returned extra fields %s',
-    extras_msg='missing fields %s',
+    missing_msg=MISSING_MSG,
+    extras_msg=EXTRAS_MSG,
 ):
     """Valid_object."""
     name = name or []
@@ -91,7 +94,8 @@ def valid_object(
                     '.'.join(name), type(obs), types
                 )
             )
-    elif isinstance(types, TypeFunction):
+        return erros
+    if isinstance(types, TypeFunction):
         resp = types(obs)
         msg = ''
         if isinstance(resp, (tuple, list, )):
@@ -105,7 +109,8 @@ def valid_object(
                         'invalid field %s:%s' % ('.'.join(name), obs, )
                     ).strip()
                 )
-    elif isinstance(types, (tuple, OR)):
+        return erros
+    if isinstance(types, (tuple, OR)):
         is_erro = True
         resps = []
         for o in types:
@@ -123,7 +128,8 @@ def valid_object(
                 resps.extend(resp)
         if is_erro:
             erros.extend(resps)
-    elif isinstance(types, (AND, )):
+        return erros
+    if isinstance(types, (AND, )):
         for o in types:
             erros.extend(valid_object(
                 obs=obs,
@@ -132,7 +138,8 @@ def valid_object(
                 missing_msg=missing_msg,
                 extras_msg=extras_msg,
             ))
-    elif isinstance(types, list) and obs:
+        return erros
+    if isinstance(types, list) and obs:
         new_name = list(name)
         if new_name:
             new_name[-1] += '[]'
@@ -158,13 +165,10 @@ def valid_object(
                 )
             if aux:
                 erros.extend(aux)
-    elif isinstance(types, dict):
-        try:
-            extras = set(obs) - set(types)
-            missing = set(types) - set(obs)
-        except Exception:
-            extras = []
-            missing = []
+        return erros
+    if isinstance(types, dict):
+        extras = set(obs) - set(types)
+        missing = set(types) - set(obs)
         num_none = len([
             t
             for t in types
@@ -172,41 +176,47 @@ def valid_object(
             isinstance(types[t], TypeNone)
         ])
         if extras_msg and len(extras):
-            erros.append(extras_msg % extras)
+            s_extras = extras_msg
+            if '%s' in s_extras:
+                s_extras = s_extras % ', '.join(extras)
+            erros.append(s_extras)
         if missing_msg and len(missing) > num_none:
-            erros.append(missing_msg % missing)
-        for nname in types:
+            s_missing = extras_msg
+            if '%s' in s_missing:
+                s_missing = s_missing % ', '.join(missing)
+            erros.append(s_missing)
+        for type_name in types:
             new_name = list(name)
-            new_name.append(nname)
+            new_name.append(type_name)
             erros.extend(
                 valid_object(
-                    obs=obs.get(nname),
-                    types=types[nname],
+                    obs=obs.get(type_name),
+                    types=types[type_name],
                     name=new_name,
                     missing_msg=missing_msg,
                     extras_msg=extras_msg,
                 )
             )
-    elif isinstance(types, (int, str, bool)):
+        return erros
+    if isinstance(types, (int, str, bool)):
         if obs != types:
             erros.append(
                 'value invalid field %s:%s != %s' % (
                     '.'.join(name), obs, types
                 )
             )
-    else:
-        raise Exception(
-            'type invalid: %s:%s' % (
-                '.'.join(name), types
-            )
+        return erros
+    raise Exception(
+        'type invalid: %s:%s' % (
+            '.'.join(name), types
         )
-    return erros
+    )
 
 
 def assert_valid_object(
     obs, types,
-    missing_msg='returned extra fields %s',
-    extras_msg='missing fields %s',
+    missing_msg=MISSING_MSG,
+    extras_msg=EXTRAS_MSG,
 ):
     """Assert_valid_object."""
     erros = valid_object(
